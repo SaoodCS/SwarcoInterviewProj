@@ -20,7 +20,7 @@ def create_database():
 create_database()
 
 ##
-##
+## -- CRUD API Endpoints -- CREATE, READ, UPDATE, DELETE -- ##
 ##
 
 # Create user endpoint:
