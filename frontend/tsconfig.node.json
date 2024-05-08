@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "skipLibCheck": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "allowSyntheticDefaultImports": true,
+    "strict": true
+    // TODO: may have to add the mui path object here like i did in tsconfig.json if mui styled components is not working...
+  },
+  "include": ["vite.config.ts"]
+}
