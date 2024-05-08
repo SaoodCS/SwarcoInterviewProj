@@ -1,7 +1,11 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import sqlite3
 
 app = Flask(__name__)
+
+# Enable CORS:
+CORS(app)
 
 
 # Function to create the SQLite database if not exists
@@ -25,25 +29,27 @@ def set_user():
     user_data = request.json
     conn = sqlite3.connect('users.db')
     c = conn.cursor()
-    c.execute("INSERT INTO users (name, age, city, address, postcode) VALUES (?, ?, ?, ?, ?)",
-              (user_data['name'], user_data['age'], user_data['city'], user_data['address'], user_data['postcode']))
+    c.execute("INSERT INTO users (id, name, age, city, address, postcode) VALUES (?, ?, ?, ?, ?, ?)",
+              (user_data['id'], user_data['name'], user_data['age'], user_data['city'], user_data['address'], user_data['postcode']))
     conn.commit()
     conn.close()
     return "User created successfully", 201
-
-# Get user endpoint:
-@app.route('/getUser', methods=['GET'])
-def get_user():
-    user_id = request.args.get('id')
+    
+# Get all users endpoint:
+@app.route('/getAllUsers', methods=['GET'])
+def get_all_users():
     conn = sqlite3.connect('users.db')
     c = conn.cursor()
-    c.execute("SELECT * FROM users WHERE id=?", (user_id,))
-    user = c.fetchone()
+    c.execute("SELECT * FROM users")
+    users = c.fetchall()
     conn.close()
-    if user:
-        return jsonify(user), 200
+    if users:
+        users_list = []
+        for user in users:
+            users_list.append({'id': user[0], 'name': user[1], 'age': user[2], 'city': user[3], 'address': user[4], 'postcode': user[5]})
+        return jsonify(users_list), 200
     else:
-        return "User not found", 404
+        return "No users found", 404
 
 # Endpoint to update an existing user
 @app.route('/updateUser', methods=['PUT'])
@@ -52,7 +58,7 @@ def update_user():
     conn = sqlite3.connect('users.db')
     c = conn.cursor()
     c.execute("UPDATE users SET name=?, age=?, city=?, address=?, postcode=? WHERE id=?",
-              (user_data['name'], user_data['age'], user_data['city'], user_data['address'], user_data['postcode'], user_data['id']))
+              (user_data['id'], user_data['name'], user_data['age'], user_data['city'], user_data['address'], user_data['postcode']))
     conn.commit()
     conn.close()
     return "User updated successfully", 200
@@ -68,6 +74,11 @@ def delete_user():
     conn.close()
     return "User deleted successfully", 200
 
+##
+##
+##
+
+# This is the main function that runs the Flask app
 if __name__ == '__main__':
     app.run(debug=True)
 

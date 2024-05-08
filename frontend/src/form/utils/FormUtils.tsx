@@ -1,5 +1,6 @@
 export namespace FormUtils {
   export interface IForm {
+    id: number;
     name: string;
     age: number | "";
     city: string;
@@ -10,6 +11,7 @@ export namespace FormUtils {
   export type IError = { [key in keyof IForm]?: string };
 
   export const initialValues: IForm = {
+    id: 0,
     name: "",
     age: "",
     city: "",
@@ -22,6 +24,11 @@ export namespace FormUtils {
     label: string;
     type: string;
   }[] = [
+    {
+      name: "id",
+      label: "ID",
+      type: "number",
+    },
     {
       name: "name",
       label: "Name",
@@ -58,6 +65,13 @@ export namespace FormUtils {
       }
     }
     return errors;
+  }
+
+  export function generateId(users: IForm[]): number {
+    const ids = users.map((user) => user.id);
+    if (!ids.length) return 1;
+    const maxId = Math.max(...ids);
+    return maxId + 1;
   }
 }
 

@@ -5,38 +5,74 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import { useContext } from "react";
+import { DataContext } from "../context/dataProvider/DataContext";
 import { Heading } from "../form/components/heading/Heading";
+import { TxtBtn } from "../form/components/styledButton/StyledButton";
 import FormUtils from "../form/utils/FormUtils";
+import APICaller from "../utils/ApiCaller";
 
 export default function DataTable() {
-  const dummyData: FormUtils.IForm[] = [
-    {
-      name: "John Doe",
-      age: 25,
-      city: "New York",
-      address: "123 Main St",
-      postcode: "12345",
-    },
-  ];
+  const { users, fetchAndSetUsers, setItemToEdit } =
+    useContext(DataContext);
+
+  async function handleDelete(userId: number): Promise<void> {
+    await APICaller.deleteUser(userId);
+    await fetchAndSetUsers();
+  }
+
+  async function handleEdit(item: FormUtils.IForm): Promise<void> {
+    setItemToEdit(item);
+  }
 
   return (
     <>
       <Heading variant="h3">Stored Data</Heading>
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} elevation={1}>
         <Table>
           <TableHead>
             <TableRow>
-              {Object.keys(dummyData[0]).map((key) => (
-                <TableCell key={key}>{key.toUpperCase()}</TableCell>
+              {[
+                "ID",
+                "NAME",
+                "AGE",
+                "CITY",
+                "ADDRESS",
+                "POSTCODE",
+                "DEL",
+                "EDIT",
+              ].map((item, index) => (
+                <TableCell key={index}>{item}</TableCell>
               ))}
             </TableRow>
           </TableHead>
           <TableBody>
-            {dummyData.map((data, index) => (
+            {users?.map((item, index) => (
               <TableRow key={index}>
-                {Object.values(data).map((value, index) => (
-                  <TableCell key={index}>{value}</TableCell>
-                ))}
+                <TableCell>{item.id}</TableCell>
+                <TableCell>{item.name}</TableCell>
+                <TableCell>{item.age}</TableCell>
+                <TableCell>{item.city}</TableCell>
+                <TableCell>{item.address}</TableCell>
+                <TableCell>{item.postcode}</TableCell>
+                <TableCell>
+                  <TxtBtn
+                    color="error"
+                    fontWeight="bold"
+                    onClick={() => handleDelete(item.id)}
+                  >
+                    DEL
+                  </TxtBtn>
+                </TableCell>
+                <TableCell>
+                  <TxtBtn
+                    color="orange"
+                    fontWeight="bold"
+                    onClick={() => handleEdit(item)}
+                  >
+                    EDIT
+                  </TxtBtn>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
