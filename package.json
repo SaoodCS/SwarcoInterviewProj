@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "b-start": "cd backend && python apiEndpoints.py",
+    "f-start": "cd frontend && npm start",
+    "start": "concurrently \"npm run f-start\" \"npm run b-start\" --prefix-colors \"bgBlue.bold,bgMagenta.bold\" --names \"FRONTEND,BACKEND\"",
+    "f-install": "cd frontend && npm install"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
