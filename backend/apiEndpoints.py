@@ -2,6 +2,8 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import sqlite3
 
+## TODO CLEANUP THIS FILE AND MEND ERROR HANDLING
+
 app = Flask(__name__)
 
 # Enable CORS:

@@ -1,6 +1,8 @@
 import axios from "axios";
 import FormUtils from "../form/utils/FormUtils";
 
+// TODO: CLEAN UP THIS FILE WITH BETTER ERROR HANDLING
+
 export namespace APICaller {
   // -- Configuration -- //
   const baseURL = "http://127.0.0.1:5000";
