@@ -58,7 +58,7 @@ def update_user():
     conn = sqlite3.connect('users.db')
     c = conn.cursor()
     c.execute("UPDATE users SET name=?, age=?, city=?, address=?, postcode=? WHERE id=?",
-              (user_data['id'], user_data['name'], user_data['age'], user_data['city'], user_data['address'], user_data['postcode']))
+              (user_data['name'], user_data['age'], user_data['city'], user_data['address'], user_data['postcode'], user_data['id']))
     conn.commit()
     conn.close()
     return "User updated successfully", 200
