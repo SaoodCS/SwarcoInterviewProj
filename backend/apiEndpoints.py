@@ -2,8 +2,6 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import sqlite3
 
-## TODO CLEANUP THIS FILE AND MEND ERROR HANDLING
-
 app = Flask(__name__)
 
 # Enable CORS:
@@ -51,7 +49,7 @@ def get_all_users():
             users_list.append({'id': user[0], 'name': user[1], 'age': user[2], 'city': user[3], 'address': user[4], 'postcode': user[5]})
         return jsonify(users_list), 200
     else:
-        return "No users found", 404
+        return jsonify([]), 200
 
 # Endpoint to update an existing user
 @app.route('/updateUser', methods=['PUT'])
